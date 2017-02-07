@@ -159,12 +159,12 @@ $(document).ready(function () {
 	});
 
 	
-	// Process retrieving tax report from JasperReport Server at VPC-Secure
+	// Process retrieving tax report from Giving Server 
 	$("#getTaxReport").click(function() {
 		var cid = $("#mycid").text();
-		console.log("Tax Report Processing for " + cid);
+//		console.log("Tax Report Processing for " + cid);
 		
-		// Get Giving Statement file name
+		// Get Giving Statement file name for this user
 		$.ajax({
 			type: "POST",
 			url: "ws/webservice.php",
@@ -196,13 +196,13 @@ $(document).ready(function () {
 					$("#result").show();
 					$("#getTaxReport").hide();
 				} 
-				// Display recurring information
+				// Access my Giving Statement
 				else 
 				{
 					var cid = jsonObj.northland_api[2].response.cid;
 					$("#mycid").text(cid);
 					var filename = jsonObj.northland_api[2].response.filename;
-					
+//					console.log("File: " + filename);
 					window.open("statements/2016/" + filename);
 				}
 
