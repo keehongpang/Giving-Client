@@ -71,6 +71,7 @@
 		</div>	
 	</div>	
 	
+	<a id="newGiving1" href="#" title="Click here to create a new giving" style="display:none">Click HERE to Create a new One-time or Scheduled Giving</a>
 	
 	<div class="panel panel-info">
 		<div class="panel-heading">
@@ -361,7 +362,7 @@
 	</div>
 
 	
-	<a id="newGiving" href="#" title="Click here to create a new giving" style="display:none">Create a new Giving</a>
+	<a id="newGiving" href="#" title="Click here to create a new giving" style="display:none">Click HERE to Create a new One-time or Scheduled Giving</a>
 	<p></p>
 
 
@@ -597,6 +598,12 @@ $(document).ready(function () {
 		return false;
 	});
 
+	$("#newGiving1").click(function() {
+		
+		clearGivingSection();
+		
+		return false;
+	});
 	
 	// Trigger proper method based on the form clicked
 	$("form").submit(function(event) {
@@ -606,9 +613,11 @@ $(document).ready(function () {
 		$("#result").hide();
 		$("#resultsuccess").hide();
 		
+		
 		var frequency	= $("#frequency").val();
 		switch($("#frequency").val()) {
 			case "ONETIME":
+				$("#newgive").prop('disabled', true);
 				processOnetimeGiving();
 				break;
 			case "WEEKLY":
@@ -724,6 +733,8 @@ function processOnetimeGiving()
 	if (errors != null && errors != '') {
 		// Display errors for Payment Validation
 		alert (errors.join("\r\n"));
+		$("#newgive").prop('disabled', false);
+
 		return false;
 	}
 
@@ -750,6 +761,7 @@ function processOnetimeGiving()
 			+ "\nDo you want to proceed?";
 
 	if (confirm(msg) != true) {
+		$("#newgive").prop('disabled', false);
 		return false;
 	}
 	
@@ -1043,6 +1055,7 @@ function parseOnetimeOnlineGiving(data)
 
 				$("#message").html(message);
 				$("#result").show();
+				$("#newgive").prop('disabled', false);
 			}
 
 		}
@@ -1365,6 +1378,7 @@ function clearGivingSection(_)
 	$("#updategive").toggle();
 	// Hide 'Create a New Giving' link
 	$("#newGiving").toggle();
+	$("#newGiving1").toggle();
 	// Show 'GIVE' button
 	$("#newgive").toggle();
 
@@ -1485,6 +1499,7 @@ function fillRecurring(el)
 	$("#newgive").hide();
 	// Show 'Create a New Giving' link
 	$("#newGiving").show();
+	$("#newGiving1").show();
 	// Show 'Save' button
 	$("#updategive").show();
 	// Show 'Cancel Recurring' button
