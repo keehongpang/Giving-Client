@@ -38,8 +38,12 @@
 	<input type="hidden" id="recurringid" name="recurringid" value="0">
 
 	<div class="alert alert-warning" role="alert">
-		All tithes and offerings go into one fund to resource ongoing ministry efforts, eliminate our building debt and fund church network expansion over a two-year period. <BR />
-		Learn more at <a href="http://tippingpoint.northlandchurch.net">tippingpoint.northlandchurch.net</a>!
+		All tithes and offerings go into one fund to resource ongoing ministry efforts, eliminate our building debt and fund church network expansion. <BR />
+	</div>	
+	<div class="alert alert-success" role="alert">
+		Want to support High school students Christmas Camp this year? <BR />
+		Click <a href="https://giving.northlandchurch.net/mission.php">HERE</a> to support! Then, select 'Christmas Camp' in Gift Type. <BR />
+		Click <a href="https://www.northlandchurch.net/christmascamp" target="_blank">HERE</a> to learn more!
 	</div>	
 
 
@@ -67,7 +71,9 @@
 		</table>
 <!--		</div>	-->
 		<div class="alert alert-warning" role="alert" style="display:block">
-			Click 'Edit' button to update your scheduled giving. Your giving displays below section. Click 'Save' button after you're done. 
+			Click 'Edit' button to update/cancel your scheduled giving. Your giving displays below section. Click 'Save' button after you're done.
+			<br>
+			You can delete your scheduled giving by clikcing 'Cancel Recurring' button next to 'Save' button. 
 		</div>	
 	</div>	
 	
@@ -87,8 +93,8 @@
 					<div class="col-sm-10">
 						<input type="text" class="form-control" id="gifttype" 	name="gifttype" value="Tithes & Offerings" readonly>
 						<br>
+<!--						<span style="display:block">Click to support <a href="./give-disaster.php">Disaster Response</a></span>		-->
 						<span>Click to support <a href="./mission.php">Short Term Mission Trips</a></span>
-						<span style="display:none">Click to support <a href="./give-disaster.php">Disaster Response</a></span>	
 					</div>
 				</div>
 
