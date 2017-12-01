@@ -42,7 +42,7 @@
 	</div>	
 	<div class="alert alert-success" role="alert">
 		Want to support High school students Christmas Camp this year? <BR />
-		Click <a href="https://giving.northlandchurch.net/mission.php">HERE</a> to support! Then, select 'Christmas Camp' in Gift Type. <BR />
+		Click <a href="https://giving.northlandchurch.net/camp.php">HERE</a> to support! Then, select 'Christmas Camp' in Gift Type. <BR />
 		Click <a href="https://www.northlandchurch.net/christmascamp" target="_blank">HERE</a> to learn more!
 	</div>	
 

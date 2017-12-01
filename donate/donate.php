@@ -55,7 +55,6 @@
 						<select id="gifttype" name="gifttype" class="form-control">
 							<option value="Trip">Short Term Mission Trip</option>
 <!--							<option value="Missionary">Support Missionary</option>	-->
-							<option value="Camp">Christmas Camp</option>		
 						</select>
 						<br>
 						<span>Go back to <a href="./givenologin.php">Give into General Giving</a></span>
