@@ -361,6 +361,9 @@
 					</div>
 				</div>
 				
+				<div id="result-danger" class="alert alert-danger" role="alert" style="display:none">
+					<p id="message-danger"></p>
+				</div>	
 				
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
@@ -376,14 +379,11 @@
 	<a id="newGiving" href="#" title="Click here to create a new giving" style="display:none">Create a new Giving</a>
 	<p></p>
 -->
-	<div id="result" class="alert alert-danger" role="alert" style="display:none">
+	<div id="result" class="alert alert-success" role="alert" style="display:none">
 		<p id="message"></p>
 		<a href="./donate.php" id="gobacktogive" class="heading heading-l">Go Back to GIVE</a>
 	</div>	
 	
-	<div id="result-danger" class="alert alert-danger" role="alert" style="display:none">
-		<p id="message-danger"></p>
-	</div>	
 
 	<div class="alert alert-warning" role="alert">
 		Please add an email address <a href='mailto:giving@northlandchurch.net'>giving@northlandchurch.net</a> into your email list to avoid spam. 
@@ -409,6 +409,7 @@
 <?php
 	include_once 'html_footer.php';
 ?>
+
 
 <?php if (!$logged_in) : ?>
 	
@@ -567,13 +568,11 @@ $(document).ready(function () {
 				processOnetimeGiving();
 				break;
 			case "WEEKLY":
-				processRecurringGiving();
-				break;
 			case "BIWEEKLY":
-				processRecurringGiving();
-				break;
 			case "MONTHLY":
-				processRecurringGiving();
+				var msg = "Scheduling a gift for Mission Trip or Missionary is not supported.<BR />Contact <a href='mailto:giving@northlandchurch.net'>giving@northlandchurch.net</a>.";
+				$("#result-danger").html(msg);
+				$("#result-danger").show();
 				break;
 			default:
 				break;
@@ -583,232 +582,6 @@ $(document).ready(function () {
 	
 });		// End for $(document).ready(
 
-
-/////////////////////////////////////////////////////////////////////
-//	Process Onetime Giving Transaction when clicked 'GIVE' 
-/////////////////////////////////////////////////////////////////////
-function processOnetimeGiving()
-{
-	// Validation checking for input variables
-	var errors 	= checkGiveNowValidation();
-	
-	// Display errors when exist from validation process
-	if (errors != null && errors != '') {
-		// Display errors for Payment Validation
-		alert (errors.join("\r\n"));
-		return false;
-	}
-	
-	// Distribution
-	var totalamount	= parseFloat($("#totalamount").text()).toFixed(2);
-	var amountGEN	= parseFloat($("#fund1amount").val());
-	if (isNaN(amountGEN))
-		amountGEN = 0;
-	var amountMIS	= parseFloat($("#fund2amount").val());
-	if (isNaN(amountMIS))
-		amountMIS = 0;
-
-	// Payment information
-	var paymenttype = $("#paymenttype").val();
-	var cardtype 	= "";
-	var cardnumber 	= "";
-	var nameoncard 	= "";
-	var expmonth	= "";
-	var expyear 	= "";
-	var bankname	= "";
-	var rtnumber	= "";
-	var acctnumber	= "";
-	var accttype	= "";
-	if (paymenttype == "creditcard") {
-		cardtype 	= $("#creditcardtype").val();
-		cardnumber	= $("#cardnumber").val().trim();
-		nameoncard	= $("#nameoncard").val().trim();
-		expmonth	= $("#cardexpmonth").val();
-		expyear		= $("#cardexpyear").val();
-	}
-	else 
-	{
-		bankname	= $("#bankname").val().trim();
-		rtnumber	= $("#bankrtnumber").val().trim();
-		acctnumber	= $("#bankacctnumber").val().trim();
-		accttype	= $("#bankaccttype").val();
-	}
-	
-	// Billing address
-	var street 		= $("#addressstreet").val().trim();
-	var city		= $("#addresscity").val().trim();
-	var state		= $("#addressstate").val();
-	var postal		= $("#addresszip").val().trim();
-	
-	// Personal information
-	var firstname 	= $("#firstname").val().trim();
-	var lastname	= $("#lastname").val().trim();
-	var email		= $("#email").val().trim();
-	var phone		= $("#phone").val().trim();
-	var phonearea	= phone.substring(0,3);
-	var phoneline	= phone.substring(3);
-	var place		= $("#place").val();
-	var comments	= $("#comments").val().trim();
-
-	
-	//////////////////////////////////////////
-	// 		Process Onetime Giving			//
-	//////////////////////////////////////////
-	// Display confirmation pop-up
-	var msg = "You selected to give now onetime with amount, $" + totalamount + "." 
-			+ "\nDo you want to proceed?";
-
-	if (confirm(msg) != true) {
-		return false;
-	}
-	
-	// Build a data to be sent for an Onetime giving
-	var send_data = "";
-	send_data = "srv=onetime_giving_nologin&format=json&amount=" + totalamount + "&fundcount=2" 
-			+ "&fundtype0=GEN" + "&fundamount0=" + amountGEN + "&fundtype1=MIS" + "&fundamount1=" + amountMIS
-			+ "&paymenttype=" + paymenttype + "&cardtype=" + cardtype  + "&cardnumber=" + cardnumber 
-			+ "&nameoncard=" + nameoncard  + "&expmonth=" + expmonth  + "&expyear=" + expyear 
-			+ "&bankname=" + bankname  + "&rtnumber=" + rtnumber  + "&acctnumber=" + acctnumber  + "&accttype=" + accttype 
-			+ "&locationstreet=" + street + "&locationcity=" + city	+ "&locationstate=" + state + "&locationzip=" + postal
-			+ "&firstname=" + firstname + "&lastname=" + lastname  + "&email=" + email  
-			+ "&phonearea=" + phonearea + "&phoneline=" + phoneline
-			+ "&worshipplace=" + place + "&comments=" + comments;
-
-	// Call a web service for an Onetime Giving
-	$.ajax({
-		type: "POST",
-		url: "../ws/webservice.php",
-		data: send_data,
-		dataType: "json",
-	})
-	.done(function(data) {
-		parseOnetimeGivingNoLogin(data);
-	})
-	.fail(function(jqXHR, textStatus) {
-		var msg = "Request failed: " + textStatus + ".<BR />Contact <a href='mailto:giving@northlandchurch.net'>Administrator</a>.";
-		$("#result").html(msg);
-		$("#result").show();
-//			alert("Request failed: " + textStatus);
-	})
-	.always(function() { });
-
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-//	Process Recurring Giving when clicked 'GIVE' or 'Save' button
-////////////////////////////////////////////////////////////////////////////////////////
-function processRecurringGiving()
-{
-	var msg = "Scheduling a gift for Mission Trip or Missionary is not supported.<BR />Contact <a href='mailto:giving@northlandchurch.net'>giving@northlandchurch.net</a>.";
-	$("#result").html(msg);
-	$("#result").show();
-
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-//	Parsing Transaction response after onetime online giving in the system
-////////////////////////////////////////////////////////////////////////////////////////
-function parseOnetimeGivingNoLogin(data) 
-{ 
-	var jsonObj = $.parseJSON(data);
-	
-	var error_len = jsonObj.northland_api[1].errors.length;
-	// Error handling for the request
-	if (error_len > 0) 
-	{
-		var error_arr = jsonObj.northland_api[1].errors;
-		var error_message = '';
-		for (var i=0; i<error_len; i++)
-			error_message += error_arr[i].number + ": " + error_arr[i].type + " - " + error_arr[i].message + "\n";
-
-		alert("Error: Please contact us at giving@northlandchurch.net\n" + error_message);
-	} 
-	else 
-	{
-		var transactions = jsonObj.northland_api[2].response.transactions;
-
-		// Error handling
-		if (jsonObj.northland_api[2].response.error != null) 
-		{
-			var error_arr = jsonObj.northland_api[2].response.error;
-			var error_message = error_arr.number + ": " + error_arr.type + " - " + error_arr.message ;
-			alert("Error: Please contact us at giving@northlandchurch.net\n" + error_message);
-		} 
-		else 
-		{
-			var message = "";
-			if (transactions[0].statuscode == 'G') {
-				// Add variables to send a confirmation email
-				var email 		= $("#email").val();
-				var firstname 	= $("#firstname").val();
-				var lastname 	= $("#lastname").val();
-				var amount 		= transactions[0].amount;
-				var refno		= transactions[0].reference;
-
-				var send_data = "";
-				// Build a data to be sent to update a Recurring giving
-				send_data = "firstname=" + firstname + "&lastname=" + lastname + "&email=" + email
-						+ "&amount=" + amount + "&refno=" + refno;
-						
-				// Call web service to send an email
-				$.ajax({
-					type: "POST",
-					url: "../mail/thankyou_onetime.php",
-					data: send_data,
-				})
-				.done(function(data) {
-					console.log(data);
-				})
-				.fail(function(jqXHR, textStatus) {
-					alert("Fail: Please contact us at giving@northlandchurch.net\n" + textStatus);
-				})
-				.always(function() { });
-
-				// Create a message for user
-				message = "Thank you for giving $ " + amount 
-					+ ".<BR />Your reference number is " + refno
-					+ ".<BR />Please contact us at giving@northlandchurch.net if you have any question";
-					
-				$("#message").html(message);
-				clearGivingSection();
-				$("#givenow").hide()
-				$("#result").show();
-			} 
-			else 
-			{
-				var error_code = (transactions[0].response).trim();
-//				console.log("ERROR:" + error_code + ".");
-				if (error_code == 'INVALID C_RTE')
-				{
-					message = "<span class='error'>Your giving has not been successful due to invalid routing number.<BR />"
-						+ "Please check the routing number and try again.</span>";
-				}
-				else if (error_code == 'EXPIRED CARD')
-				{
-					message = "<span class='error'>Your giving has not been successful because of the expiration date.<BR />"
-						+ "Please check the expiration date and try again.</span>";
-				}
-				else if ((error_code == 'CARD NO. ERROR') || (error_code == 'INVALID C_CARDNUMBER'))
-				{
-					message = "<span class='error'>Your giving has not been successful because of the invalid card number.<BR />"
-						+ "Please check the card number and try again.<BR />"
-						+ "Check your credit card provider if this error keeps happening.</span>";
-				}
-				else 
-				{
-					message = "<span class='error'>Your giving has not been successful.<BR />"
-						+ "Please check your bank or credit card company and try again.</span>";
-				}
-
-				$("#message").html(message);
-				$("#result").show();
-			}
-
-		}
-	}
-}
 
 
 
@@ -858,127 +631,6 @@ function calculateTotalAmount()
 	$("#totalamount").html(tatalAmount.toFixed(2));
 }
 
-
-////////////////////////////////////////////////////////////////////////////////////////
-//	Checking if the credit card or bank account information entered is valid
-//  Returns error messages if there are any invalid information
-////////////////////////////////////////////////////////////////////////////////////////
-function checkGiveNowValidation()
-{
-	var errors = [];
-	
-	// Total amount validation
-	var total	= parseFloat($("#totalamount").text()).toFixed(2);
-	if (total == 0.00) {
-		errors.push ("Enter at least $1.00 in the Amount");
-	}
-	
-	// Start date validation in case it's a recurring giving
-	if ($("#frequency").val() != "ONETIME") {
-		var nextdate = $("#datepicker").val();
-		if (nextdate == null || nextdate == '')
-			errors.push ("Select Start date of the gift");
-	}
-
-	var paymenttype	= $("#paymenttype").val();
-	// Check validation for Credit Card
-	if (paymenttype == "creditcard") 
-	{
-		var cardtype 	= $("#creditcardtype").val();
-		var cardnumber 	= $("#cardnumber").val().trim();
-		var nameoncard 	= $("#nameoncard").val().trim();
-
-		if (cardtype == null || cardtype == '') {
-			errors.push ("Select Credit Card Type");
-		}
-		if (cardnumber == null || cardnumber == '') {
-			errors.push ("Enter Credit Card Number");
-		} 
-
-		if (cardtype != null && cardtype != '' && cardnumber != null && cardnumber != '') 
-		{
-			// Checking if the credit card information is valid with number and card type
-			if (!checkCreditCard(cardnumber, cardtype)) {
-				errors.push (ccErrors[ccErrorNo]);
-			}
-		}
-
-		if (nameoncard == null || nameoncard == '') {
-			errors.push ("Enter Credit Card Holder Name");
-		}
-		if ($("#cardexpmonth").val() == null || $("#cardexpmonth").val() == '') {
-			errors.push ("Select Credit Card Expiration Month");
-		}
-		if ($("#cardexpyear").val() == null || $("#cardexpyear").val() == '') {
-			errors.push ("Select Credit Card Expiration Year");
-		}		
-	} 
-	// Check validation for Adding Bank Account
-	else if (paymenttype == "bankaccount")  
-	{
-		var bankname	= $("#bankname").val().trim();
-		var rtnumber	= $("#bankrtnumber").val().trim();
-		var acctnumber	= $("#bankacctnumber").val().trim();
-		
-		if (bankname == null || bankname == '') {
-			errors.push ("Enter bank name");
-		}
-		if (rtnumber == null || rtnumber == '') {
-			errors.push ("Enter bank routing number");
-		} else {
-			// Checking if the bank routing information is valid with number 
-			if (!checkNumber(rtnumber)) 
-				errors.push (ccErrors[ccErrorNo]);
-		}
-		if (acctnumber == null || acctnumber == '') {
-			errors.push ("Enter account number");
-		} else {
-			// Checking if the bank account information is valid with number 
-			if (!checkBankAccount(acctnumber)) 
-				errors.push (ccErrors[ccErrorNo]);
-		}
-		if ($("#bankaccttype").val() == null || $("#bankaccttype").val() == '') {
-			errors.push ("Select Account Type");
-		}
-	} 
-	else 
-	{
-	}
-
-	// Address line validation
-	var addressstreet = $("#addressstreet").val().trim();
-	if ((addressstreet.length < 5))	{
-		errors.push ("Enter a valid address.");
-	}
-	// City validation
-	var addresscity = $("#addresscity").val().trim();
-	if (addresscity.length < 3)	{
-		errors.push ("Enter a valid city.");
-	}
-	// Postal code validation
-	var addresszip = $("#addresszip").val().trim();
-	if (addresszip.length < 3)	{
-		errors.push ("Enter a valid postal code.");
-	}
-
-	var firstname	= $("#firstname").val().trim();
-	var lastname	= $("#lastname").val().trim();
-	var email		= $("#email").val().trim();
-	var phone		= $("#phone").val().trim();
-	// Name validation
-	if (firstname.length < 1 || lastname.length < 1)	{
-		errors.push ("Enter first and last name");
-	}
-
-	if (!validateEmail(email))
-		errors.push ("Enter a valid email address");
-
-	if (phone == "" || !checkNumber(phone))	{
-		errors.push ("Enter your valid phone number");
-	}
-
-	return errors;	
-}
 
 
 var ccErrorNo = 0;

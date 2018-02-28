@@ -1,4 +1,5 @@
 <?php
+	header('Location: ./givenologin.php');
 	include_once 'html_open.php';
 ?>
 
@@ -103,11 +104,6 @@
 					<div class="col-sm-10">
 						<select id="frequency" name="frequency" class="form-control">
 							<option value="ONETIME">One-Time</option>
-<!--
-							<option value="WEEKLY">Weekly</option>
-							<option value="BIWEEKLY">Bi-Weekly</option>
-							<option value="MONTHLY">Monthly</option>
--->
 						</select>
 					</div>
 				</div>
@@ -360,13 +356,17 @@
 					</div>
 				</div>
 				
+				<div id="result-danger" class="alert alert-danger" role="alert" style="display:none">
+					<p id="message-danger"></p>
+				</div>	
 				
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						<button type="submit" id="newgive" 		class="btn btn-primary">GIVE</button>
 					</div>
 				</div>
-			
+
+				
 			</form>
 		</div>
 	</div>
@@ -375,13 +375,9 @@
 	<a id="newGiving" href="#" title="Click here to create a new giving" style="display:none">Create a new Giving</a>
 	<p></p>
 -->
-	<div id="result" class="alert alert-danger" role="alert" style="display:none">
+	<div id="result" class="alert alert-success" role="alert" style="display:none">
 		<p id="message"></p>
 		<a href="./camp.php" id="gobacktogive" class="heading heading-l">Go Back to GIVE</a>
-	</div>	
-	
-	<div id="result-danger" class="alert alert-danger" role="alert" style="display:none">
-		<p id="message-danger"></p>
 	</div>	
 
 	<div class="alert alert-warning" role="alert">
@@ -557,13 +553,11 @@ $(document).ready(function () {
 				processOnetimeGiving();
 				break;
 			case "WEEKLY":
-				processRecurringGiving();
-				break;
 			case "BIWEEKLY":
-				processRecurringGiving();
-				break;
 			case "MONTHLY":
-				processRecurringGiving();
+				var msg = "Scheduling a gift for Mission Trip or Missionary is not supported.<BR />Contact <a href='mailto:giving@northlandchurch.net'>giving@northlandchurch.net</a>.";
+				$("#result-danger").html(msg);
+				$("#result-danger").show();
 				break;
 			default:
 				break;
@@ -654,7 +648,7 @@ function processOnetimeGiving()
 	
 	// Build a data to be sent for an Onetime giving
 	var send_data = "";
-	send_data = "srv=onetime_giving_nologin&format=json&amount=" + totalamount + "&fundcount=2" 
+	send_data = "srv=giving_onetime_nologin&format=json&amount=" + totalamount + "&fundcount=2" 
 			+ "&fundtype0=GEN" + "&fundamount0=" + amountGEN + "&fundtype1=MIS" + "&fundamount1=" + amountMIS
 			+ "&paymenttype=" + paymenttype + "&cardtype=" + cardtype  + "&cardnumber=" + cardnumber 
 			+ "&nameoncard=" + nameoncard  + "&expmonth=" + expmonth  + "&expyear=" + expyear 
@@ -681,18 +675,6 @@ function processOnetimeGiving()
 //			alert("Request failed: " + textStatus);
 	})
 	.always(function() { });
-
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-//	Process Recurring Giving when clicked 'GIVE' or 'Save' button
-////////////////////////////////////////////////////////////////////////////////////////
-function processRecurringGiving()
-{
-	var msg = "Scheduling a gift for Mission Trip or Missionary is not supported.<BR />Contact <a href='mailto:giving@northlandchurch.net'>giving@northlandchurch.net</a>.";
-	$("#result").html(msg);
-	$("#result").show();
 
 }
 
