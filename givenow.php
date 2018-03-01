@@ -17,7 +17,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">New Message Template</h4>
+				<h4 class="modal-title" id="myModalLabel">Give!</h4>
 			</div>
 
 			<div class="modal-body">
@@ -303,6 +303,8 @@
 						</div>
 					</div>
 
+				<div id="modaldanger" class="alert alert-danger" role="alert" style="display:none"></div>
+					
 					<div class="form-group">
 						<div class="col-sm-offset-2 col-sm-10">
 							<button type="submit" id="newgive" 		class="btn btn-primary">GIVE</button>
@@ -316,7 +318,6 @@
 			</div>
 
 			<div class="modal-footer">
-				<div id="modaldanger" class="alert alert-danger" role="alert" style="display:none"></div>
 			</div>
 		</div>
 	</div>
@@ -353,7 +354,7 @@
 
 	<div class="panel panel-warning">
 		<div class="panel-heading">
-			<H3 class="panel-title">All tithes and offerings go into one fund to resource ongoing ministry efforts, eliminate our building debt and fund church network expansion</H3>
+			<H3 class="panel-title" style="text-align: center">All tithes and offerings go into one fund to resource ongoing ministry efforts, eliminate our building debt and fund church network expansion</H3>
 		</div>
 	</div>
 
@@ -369,7 +370,18 @@
 		</div>
 	</div>
 	
+	<div class="panel panel-info" style="display:block">
+		<div class="panel-heading">
+			<H3 class="panel-title">Giving Statement for 2017</H3>
+		</div>
+		<div class="panel-body">
+			Giving statement for the year of 2017 is ready Now! <BR />
+			Download button is available at <a href="https://giving.northlandchurch.net/myhistory.php">History section</a>.<BR />
+		</div>
+	</div>
+	
 
+	
 	<div>
 		<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#giveModal" data-id="0">Give Now or Schedule Recurring Gift</button>
 		<a href="./mission.php" class="btn btn-info  btn-lg btn-block" role="button">Support Short Term Mission Trips</a>
@@ -472,11 +484,17 @@ $(document).ready(function () {
 	var state = populateState();
 	$("#addressstate").html(state);
 
+	$.ajaxSetup({
+		headers : {
+			'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+			'TokenString': $('meta[name="token-string"]').attr('content')
+		}
+	});
 	
 	// Get User information by starting up, then Get Payments and Recurrings
 	$.ajax({
 		type: "POST",
-		url: "ws/webservice.php",
+		url: "ws/webservice_old.php",
 		data: "srv=get_user_by_email&format=json&email="+myemail+"&screen_name="+myscreenname,
 		dataType: "json",
 	})
@@ -554,7 +572,7 @@ $(document).ready(function () {
 		// Call a web service to Add a Credit Card 
 		$.ajax({
 			type: "POST",
-			url: "ws/webservice.php",
+			url: "ws/webservice_old.php",
 			data: "srv=add_payment&format=json&email=" + myemail + "&paymenttype=creditcard"+"&cardtype="+$("#creditcardtype").val()
 				+"&cardname="+$("#nameoncard").val()+"&cardnumber="+$("#cardnumber").val()+"&cardexpmonth="+$("#cardexpmonth").val()+"&cardexpyear="+$("#cardexpyear").val(),
 			dataType: "json",
@@ -590,7 +608,7 @@ $(document).ready(function () {
 		// Call a web service to Add a Bank Account
 		$.ajax({
 			type: "POST",
-			url: "ws/webservice.php",
+			url: "ws/webservice_old.php",
 			data: "srv=add_payment&format=json&email=" + myemail + "&paymenttype=bankaccount"+"&bankname="+$("#bankname").val()
 				+"&bankrtnumber="+$("#bankrtnumber").val()+"&bankacctnumber="+$("#bankacctnumber").val()+"&bankaccttype="+$("#bankaccttype").val(),
 			dataType: "json",
@@ -660,7 +678,7 @@ $(document).ready(function () {
 		// Call a web service to add a Recurring giving
 		$.ajax({
 			type: "POST",
-			url: "ws/webservice.php",
+			url: "ws/webservice_old.php",
 			data: send_data,
 			dataType: "json",
 		})
@@ -789,7 +807,7 @@ function getPaymentsAndRecurrings()
 	// Get all Payments by starting up
 	$.ajax({
 		type: "POST",
-		url: "ws/webservice.php",
+		url: "ws/webservice_old.php",
 		data: "srv=get_payments_by_email&format=json&email="+myemail,
 		dataType: "json",
 	})
@@ -808,7 +826,7 @@ function getPaymentsAndRecurrings()
 	// Get all Recurring Gifts by starting up
 	$.ajax({
 		type: "POST",
-		url: "ws/webservice.php",
+		url: "ws/webservice_old.php",
 		data: "srv=get_recurring_giving&format=json&email="+myemail,
 		dataType: "json",
 	})
@@ -890,7 +908,7 @@ function processOnetimeGiving()
 	// Call a web service for an Onetime Giving
 	$.ajax({
 		type: "POST",
-		url: "ws/webservice.php",
+		url: "ws/webservice_old.php",
 		data: send_data,
 		dataType: "json",
 	})
@@ -1012,7 +1030,7 @@ function processRecurringGiving()
 		// Call a web service to add a Recurring giving
 		$.ajax({
 			type: "POST",
-			url: "ws/webservice.php",
+			url: "ws/webservice_old.php",
 			data: send_data,
 			dataType: "json",
 		})
@@ -1045,7 +1063,7 @@ function processRecurringGiving()
 		// Call a web service to update a Recurring giving
 		$.ajax({
 			type: "POST",
-			url: "ws/webservice.php",
+			url: "ws/webservice_old.php",
 			data: send_data,
 			dataType: "json",
 		})
@@ -2040,7 +2058,7 @@ function createCancelButtonEvent()
 		// Call a web service to delete a Recurring giving
 		$.ajax({
 			type: "POST",
-			url: "ws/webservice.php",
+			url: "ws/webservice_old.php",
 			data: send_data,
 			dataType: "json",
 		})

@@ -86,6 +86,7 @@
 	.follow-the-author, .download-link { display:none }
 </style>
   
+<HR>
 <footer>
 	<div class="img-container top"><img src="https://www.northlandchurch.net/_img/uploads/logo-footer.png" alt="Northland Church" /></div>
 	<div class="nav-list-container">
@@ -177,13 +178,14 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script type="text/JavaScript" 	src="js/sha512.js"></script> 
-<script type="text/JavaScript" 	src="js/forms.js"></script> 
+<script type="text/JavaScript" 	src="js/sha512.obfuscated.js"></script> 
+<script type="text/JavaScript" 	src="js/forms.obfuscated.js"></script> 
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>	-->
 <script src="./bootstrap-3.3.5/dist/js/bootstrap.min.js"></script>
 <script src="js/jquery-ui-1.11.0/jquery-ui.js"></script>
+<script type="text/javascript" src="js/draggable-modal.js"></script>
 <script src="js/nacd-utils.js"></script>
-<script src="js/nacd-validation.js"></script>
+<script src="js/nacd.validation.obfuscated.js"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="./bootstrap-3.3.5/docs/assets/js/ie10-viewport-bug-workaround.js"></script>
 

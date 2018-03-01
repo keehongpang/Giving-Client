@@ -424,11 +424,17 @@ $(document).ready(function () {
 	var state = populateState();
 	$("#addressstate").html(state);
 
+	$.ajaxSetup({
+		headers : {
+			'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+			'TokenString': $('meta[name="token-string"]').attr('content')
+		}
+	});
 	
 	// Get all Payments by starting up
 	$.ajax({
 		type: "POST",
-		url: "ws/webservice.php",
+		url: "ws/webservice_old.php",
 		data: "srv=get_payments_by_email&format=json&email="+myemail,
 		dataType: "json",
 	})
@@ -447,7 +453,7 @@ $(document).ready(function () {
 	// Get User information by starting up
 	$.ajax({
 		type: "POST",
-		url: "ws/webservice.php",
+		url: "ws/webservice_old.php",
 		data: "srv=get_user_by_email&format=json&email="+myemail+"&screen_name="+myscreenname,
 		dataType: "json",
 	})
@@ -466,7 +472,7 @@ $(document).ready(function () {
 	// Get all Recurring Gifts by starting up
 	$.ajax({
 		type: "POST",
-		url: "ws/webservice.php",
+		url: "ws/webservice_old.php",
 		data: "srv=get_recurring_giving&format=json&email="+myemail,
 		dataType: "json",
 	})
@@ -551,7 +557,7 @@ $(document).ready(function () {
 		// Call a web service to Add a Credit Card 
 		$.ajax({
 			type: "POST",
-			url: "ws/webservice.php",
+			url: "ws/webservice_old.php",
 			data: "srv=add_payment&format=json&email=" + myemail + "&paymenttype=creditcard"+"&cardtype="+$("#creditcardtype").val()
 				+"&cardname="+$("#nameoncard").val()+"&cardnumber="+$("#cardnumber").val()+"&cardexpmonth="+$("#cardexpmonth").val()+"&cardexpyear="+$("#cardexpyear").val(),
 			dataType: "json",
@@ -580,7 +586,7 @@ $(document).ready(function () {
 		// Call a web service to Add a Bank Account
 		$.ajax({
 			type: "POST",
-			url: "ws/webservice.php",
+			url: "ws/webservice_old.php",
 			data: "srv=add_payment&format=json&email=" + myemail + "&paymenttype=bankaccount"+"&bankname="+$("#bankname").val()
 				+"&bankrtnumber="+$("#bankrtnumber").val()+"&bankacctnumber="+$("#bankacctnumber").val()+"&bankaccttype="+$("#bankaccttype").val(),
 			dataType: "json",
@@ -655,7 +661,7 @@ $(document).ready(function () {
 		// Call a web service to add a Recurring giving
 		$.ajax({
 			type: "POST",
-			url: "ws/webservice.php",
+			url: "ws/webservice_old.php",
 			data: send_data,
 			dataType: "json",
 		})
@@ -736,7 +742,7 @@ function processOnetimeGiving()
 	// Call a web service for an Onetime Giving
 	$.ajax({
 		type: "POST",
-		url: "ws/webservice.php",
+		url: "ws/webservice_old.php",
 		data: send_data,
 		dataType: "json",
 	})
@@ -857,7 +863,7 @@ function processRecurringGiving()
 		// Call a web service to add a Recurring giving
 		$.ajax({
 			type: "POST",
-			url: "ws/webservice.php",
+			url: "ws/webservice_old.php",
 			data: send_data,
 			dataType: "json",
 		})
@@ -891,7 +897,7 @@ function processRecurringGiving()
 		// Call a web service to update a Recurring giving
 		$.ajax({
 			type: "POST",
-			url: "ws/webservice.php",
+			url: "ws/webservice_old.php",
 			data: send_data,
 			dataType: "json",
 		})

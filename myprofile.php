@@ -52,6 +52,15 @@
 						<p id="myprofileemail" class="form-control-static"></p>
 					</div>
 				</div>	
+				
+				<div class="form-group">
+					<div class="col-sm-12">
+						<ul class="list-group">
+						  <li class="list-group-item list-group-item-warning">Email is linked to your Giving Records as an identifier.<BR />
+						  Please contact giving@northlandchurch.net if you want to change Email address.</li>
+						</ul>
+					</div>
+				</div>	
 			</form>
 		</div>
 	</div>	
@@ -237,10 +246,17 @@ $(document).ready(function () {
 	var state = populateState();
 	$("#addressstate").html(state);
 
+	$.ajaxSetup({
+		headers : {
+			'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+			'TokenString': $('meta[name="token-string"]').attr('content')
+		}
+	});
+	
 	// Get User information by starting up
 	$.ajax({
 		type: "POST",
-		url: "ws/webservice.php",
+		url: "ws/webservice_old.php",
 		data: "srv=get_user_by_email&format=json&email="+myemail+"&screen_name="+myscreenname,
 		dataType: "json",
 	})
@@ -302,7 +318,7 @@ function processUpdateName()
 	// Send an Ajax request to update name 
 	$.ajax({
 		type: "POST",
-		url: "ws/webservice.php",
+		url: "ws/webservice_old.php",
 		data: "srv=update_person_by_id&format=json&personid="+personid+"&firstname="+firstname+"&lastname="+lastname,
 		dataType: "json",
 	})
@@ -341,7 +357,7 @@ function processUpdateAddress()
 	// Send an Ajax request to update naddress
 	$.ajax({
 		type: "POST",
-		url: "ws/webservice.php",
+		url: "ws/webservice_old.php",
 		data: "srv=update_address_by_id&format=json&addressid="+addressid+"&billingline1="+billingline1+"&billingcity="+billingcity+"&billingstate="+billingstate+"&billingzip="+billingzip,
 		dataType: "json",
 	})
@@ -378,7 +394,7 @@ function processUpdatePhone()
 	// Send an Ajax request to update phone 
 	$.ajax({
 		type: "POST",
-		url: "ws/webservice.php",
+		url: "ws/webservice_old.php",
 		data: "srv=update_phone_by_id&format=json&phoneid="+phoneid+"&phonearea="+phonearea+"&phoneline="+phoneline,
 		dataType: "json",
 	})

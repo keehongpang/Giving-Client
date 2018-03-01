@@ -1,11 +1,27 @@
 <!DOCTYPE html>
 <html>
+<?php
+	include_once 'includes/db_connect.php';
+	include_once 'includes/functions.php';
+	 
+	sec_session_start();
+
+	$logged_in = login_check($mysqli);
+	if ($logged_in) {
+		$logged = 'in';
+	} else {
+		$logged = 'out';
+	}
+
+?>
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="HandheldFriendly" content="True">
 	<meta name="MobileOptimized" content="320">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="csrf-token" content="<?= $_SESSION['csrf_token'] ?>">
+	<meta name="token-string" content="<?= $_SESSION['token_string'] ?>">
 	<link rel="shorcut icon" href="/images/favicon.png">
 
 	
@@ -41,20 +57,6 @@
     <![endif]-->
   </head>
 
-<?php
-	include_once 'includes/db_connect.php';
-	include_once 'includes/functions.php';
-	 
-	sec_session_start();
-
-	$logged_in = login_check($mysqli);
-	if ($logged_in) {
-		$logged = 'in';
-	} else {
-		$logged = 'out';
-	}
-
-?>
 
 <body>
 

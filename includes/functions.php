@@ -28,6 +28,22 @@ function sec_session_start() {
 	// Sets the session name to the one set above.
 	session_name($session_name);
 	session_start();            // Start the PHP session 
+
+
+	if (empty($_SESSION['csrf_token'])) {
+		if (function_exists('mcrypt_create_iv')) 
+		{
+			$_SESSION['csrf_token'] = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
+		} 
+		else 
+		{
+			$_SESSION['csrf_token'] = bin2hex(openssl_random_pseudo_bytes(32));
+		}
+	}
+	
+	$user_browser 				= $_SERVER['HTTP_USER_AGENT'];
+	$_SESSION['token_string'] 	= hash('sha512', $_SESSION['csrf_token'] . $user_browser);
+
 	
 	// regenerated the session, delete the old one.  
 	// helps prevent session hijacking.

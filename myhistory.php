@@ -33,7 +33,7 @@
 	</div>	
 	
 
-	<button id='getTaxReport' type="button" class="btn btn-success btn-block" style="display:block">Click for 2016 Tax Report</button> 
+	<button id='getTaxReport' type="button" class="btn btn-success btn-block" style="display:block">Click for 2017 Tax Report</button> 
 	<BR />
 	
 	<div class="panel panel-info table-responsive">
@@ -41,6 +41,7 @@
 			<H4>
 				<label for="cardexpiration">Select Year: </label>
 				<select id="year" name="year">
+					<option value="2018">2018</option>
 					<option value="2017">2017</option>
 					<option value="2016">2016</option>
 					<option value="2015">2015</option>
@@ -120,10 +121,17 @@ $(document).ready(function () {
 	var d 		= new Date();
 	var year 	= d.getFullYear();
 
+	$.ajaxSetup({
+		headers : {
+			'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+			'TokenString': $('meta[name="token-string"]').attr('content')
+		}
+	});
+	
 	// Get Giving history of the currenty year by starting up
 	$.ajax({
 		type: "POST",
-		url: "ws/webservice.php",
+		url: "ws/webservice_old.php",
 		data: "srv=get_giving_history&format=json&email="+myemail+"&year="+year,
 		dataType: "json",
 	})
@@ -144,7 +152,7 @@ $(document).ready(function () {
 		// Get giving history on selected year
 		$.ajax({
 			type: "POST",
-			url: "ws/webservice.php",
+			url: "ws/webservice_old.php",
 			data: "srv=get_giving_history&format=json&email="+myemail+"&year="+year,
 			dataType: "json",
 		})
@@ -167,7 +175,7 @@ $(document).ready(function () {
 		// Get Giving Statement file name for this user
 		$.ajax({
 			type: "POST",
-			url: "ws/webservice.php",
+			url: "ws/webservice_old.php",
 			data: "srv=get_statement_filename&format=json&cid="+cid,
 			dataType: "json",
 		})
@@ -203,7 +211,7 @@ $(document).ready(function () {
 					$("#mycid").text(cid);
 					var filename = jsonObj.northland_api[2].response.filename;
 //					console.log("File: " + filename);
-					window.open("statements/2016/" + filename);
+					window.open("statements/2017/" + filename);
 				}
 
 			}
